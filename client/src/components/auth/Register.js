@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, {Component} from 'react';
 import classnames from 'classnames';
+
+import {registerUser} from '../../actions/authAction'
+import {connect} from 'react-redux'
 
 class Register extends Component {
   constructor() {
@@ -17,8 +19,16 @@ class Register extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({
+        errors: nextProps.errors
+      })
+    }
+  }
+
   onChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({[e.target.name]: e.target.value});
   }
 
   onSubmit(e) {
@@ -30,15 +40,12 @@ class Register extends Component {
       password: this.state.password,
       password2: this.state.password2
     };
+    this.props.registerUser(newUser);
 
-    axios
-      .post('/api/users/register', newUser)
-      .then(res => console.log(res.data))
-      .catch(err => this.setState({ errors: err.response.data }));
   }
 
   render() {
-    const { errors } = this.state;
+    const {errors} = this.state;
 
     return (
       <div className="register">
@@ -114,7 +121,7 @@ class Register extends Component {
                     <div className="invalid-feedback">{errors.password2}</div>
                   )}
                 </div>
-                <input type="submit" className="btn btn-info btn-block mt-4" />
+                <input type="submit" className="btn btn-info btn-block mt-4"/>
               </form>
             </div>
           </div>
@@ -124,4 +131,9 @@ class Register extends Component {
   }
 }
 
-export default Register;
+
+const mapStoreToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+export default connect(mapStoreToProps, {registerUser})(Register);

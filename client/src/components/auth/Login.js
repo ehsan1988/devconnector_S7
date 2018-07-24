@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+import {connect} from 'react-redux'
+import {registerUser} from '../../actions/authAction'
 
 class Login extends Component {
   constructor() {
@@ -25,7 +27,7 @@ class Login extends Component {
   }
 
   onChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({[e.target.name]: e.target.value});
   }
 
   render() {
@@ -59,7 +61,7 @@ class Login extends Component {
                     onChange={this.onChange}
                   />
                 </div>
-                <input type="submit" className="btn btn-info btn-block mt-4" />
+                <input type="submit" className="btn btn-info btn-block mt-4"/>
               </form>
             </div>
           </div>
@@ -69,4 +71,5 @@ class Login extends Component {
   }
 }
 
-export default Login;
+
+export default connect(null, {registerUser})(Login);
